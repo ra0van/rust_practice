@@ -3,6 +3,12 @@ use std::sync::{Arc, Mutex};
 mod struct_trait;
 use crate::struct_trait::Animal;
 
+mod generics;
+mod closures;
+mod mpsc_ex;
+
+#[path = "./assignment/task.rs"]
+mod task;
 // Sum of array in parallel
 fn sum_of_array(){
     let mut arr = vec![];
@@ -35,55 +41,27 @@ fn print_twice<T> (value: T) where T: std::fmt::Debug {
     
 }
 
-struct Point<T> {
-    x: T,
-    y: T,
-}
-
-enum Result<T, E> {
-    Ok(T),
-    Err(E),
-}
-
-fn main() {
-    sum_of_array();
-    println!("Hello World");
-
+fn run_trait_ex(){
+    println!("====== Run Trait Ex======");
     let dog = struct_trait::Dog {
         name: String::from("Rusty"),
     };
     println!("{}", dog.make_sound());
     print_twice(dog.name);
-
-    // Generics
-    let pass: Result<i32, &str> = Result::Ok(5);
-
-    let fail: Result<i32, &str> = Result::Err("Something went wrong");
-
-    match pass {
-        Result::Ok(value) => println!("Success: {}", value), 
-        Result::Err(value) => println!("Failure: {}", value),
-    }
-
-    match fail{
-        Result::Ok(value) => println!("Success: {}", value), 
-        Result::Err(value) => println!("Failure: {}", value),
-    }
-    
-    // Closures
-    let multiply_2 = |x | x * 2;
-
-    println!("Multiply by 2: {}", multiply_2(5));
-
-    // Borrowing
-    let message = String::from("This is a message");
-
-    let message_copy = message.clone();
-
-    let printer = move || println!("{}", message);
-
-    printer();
-
-    println!("Message: {}", message_copy);
+    println!("====== End Trait Ex======");
 }
 
+
+fn execute() {
+    sum_of_array();
+    run_trait_ex();
+    generics::run_generic_ex();
+    closures::run_closure_ex();
+    mpsc_ex::main();
+
+    task::main();
+}
+
+fn main() {
+    execute();
+}
